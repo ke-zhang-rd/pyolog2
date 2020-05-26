@@ -1,5 +1,6 @@
 import olog
 import os
+from datetime import datetime
 from pathlib import Path
 import vcr as _vcr
 
@@ -60,6 +61,8 @@ ATTACHMENT_FILE = {'file': open('README.md', 'rb'),
                    'fileMetadataDescription': (None, 'This is a attachment')}
 ATTACHMENT_NAME = ATTACHMENT_FILE['filename'][1]
 
+DATETIME_STR = '2015-01-01 00:00:00.123456'
+DATETIME_OBJ = datetime(2015, 1, 1, 0, 0, 0, 123456)
 
 @vcr.use_cassette()
 def test_get_logbooks():
@@ -141,3 +144,8 @@ def test_put_properties():
 @vcr.use_cassette()
 def test_put_property():
     cli.put_property(PROPERTY)
+
+
+def test_ensure_time():
+    assert '2015-01-01 00:00:00.123' == olog.ensure_time(DATETIME_OBJ)
+    assert '2015-01-01 00:00:00.123' == olog.ensure_time(DATETIME_STR)
